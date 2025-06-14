@@ -19,8 +19,12 @@ set(LIBS ${LIBS} GLAD)
 
 # Get all source files
 # TODO - Rework to allow for multiple files in the src directory
-file(GLOB source "src/*.cpp" "src/*.h")
+file(GLOB_RECURSE source "src/*.cpp" "src/*.h")
 
-add_executable(Meowcraft ${source})
+file(GLOB shaders "src/Assets/Shaders/*.glsl")
+
+set(ALL_SOURCE ${source} ${shaders})
+
+add_executable(Meowcraft ${ALL_SOURCE})
 include_directories(${CMAKE_SOURCE_DIR}/includes)
 target_link_libraries(Meowcraft ${LIBS})
