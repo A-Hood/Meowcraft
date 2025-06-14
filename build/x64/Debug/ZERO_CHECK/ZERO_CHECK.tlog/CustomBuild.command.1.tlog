@@ -1,0 +1,10 @@
+^C:\USERS\DABPO\DOCUMENTS\GITHUB\MEOWCRAFT\BUILD\CMAKEFILES\7F77895DE1D16231CB460429FD66E7FA\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/dabpo/Documents/GitHub/Meowcraft -BC:/Users/dabpo/Documents/GitHub/Meowcraft/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/dabpo/Documents/GitHub/Meowcraft/build/Meowcraft.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

@@ -1,0 +1,5 @@
+C:/Users/dabpo/Documents/GitHub/Meowcraft/build/CMakeFiles/STB_IMAGE.dir
+C:/Users/dabpo/Documents/GitHub/Meowcraft/build/CMakeFiles/GLAD.dir
+C:/Users/dabpo/Documents/GitHub/Meowcraft/build/CMakeFiles/Meowcraft.dir
+C:/Users/dabpo/Documents/GitHub/Meowcraft/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/dabpo/Documents/GitHub/Meowcraft/build/CMakeFiles/ZERO_CHECK.dir
