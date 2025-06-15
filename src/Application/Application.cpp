@@ -194,63 +194,63 @@ int Application::Run()
 	// render loop
 	while (!glfwWindowShouldClose(m_window))
 	{
-		// Delta time
-		float currentFrame = glfwGetTime();
-		m_deltaTime = currentFrame - m_lastFrame;
-		m_lastFrame = currentFrame;
+            // Delta time
+            float currentFrame = glfwGetTime();
+            m_deltaTime = currentFrame - m_lastFrame;
+            m_lastFrame = currentFrame;
 
-		// input
-		// -----
-		ProcessInput(m_camera);
+            // input
+            // -----
+            ProcessInput(m_camera);
 
-		// render
-		// ------
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            // render
+            // ------
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::vec3 lightPos(1.0f, 0.5f, 1.0f);
-        lightPos.x = 1.0f + cos(glfwGetTime()) * 2.0f;
-        lightPos.z = 1.0f + cos(glfwGetTime()) * 2.0f;
-        //lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
+            glm::vec3 lightPos(1.0f, 0.5f, 1.0f);
+            lightPos.x = 1.0f + cos(glfwGetTime()) * 2.0f;
+            lightPos.z = 1.0f + cos(glfwGetTime()) * 2.0f;
+            //lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
 
-        lightingShader.use();
-        glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view = m_camera->GetViewMatrix();
-        glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetFOV()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-        //model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-        lightingShader.setMat4("model", model);
-        lightingShader.setMat4("view", view);
-        lightingShader.setMat4("projection", projection);
-        lightingShader.setVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);
-        lightingShader.setVec3("viewPos", m_camera->GetCameraPos().x, m_camera->GetCameraPos().y, m_camera->GetCameraPos().z);
+            lightingShader.use();
+            glm::mat4 model = glm::mat4(1.0f);
+            glm::mat4 view = m_camera->GetViewMatrix();
+            glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetFOV()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+            //model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+            lightingShader.setMat4("model", model);
+            lightingShader.setMat4("view", view);
+            lightingShader.setMat4("projection", projection);
+            lightingShader.setVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);
+            lightingShader.setVec3("viewPos", m_camera->GetCameraPos().x, m_camera->GetCameraPos().y, m_camera->GetCameraPos().z);
 
-        // cubes
-        glBindVertexArray(cubeVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, cubeTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
+            // cubes
+            glBindVertexArray(cubeVAO);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, cubeTexture);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            glBindVertexArray(0);
 
-        // light cube
-        lightCubeShader.use();
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
-        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(0.2f));
-        lightCubeShader.setMat4("model", model);
-        lightCubeShader.setMat4("view", view);
-        lightCubeShader.setMat4("projection", projection);
-        glBindVertexArray(lightCubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
+            // light cube
+            lightCubeShader.use();
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, lightPos);
+            //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+            model = glm::scale(model, glm::vec3(0.2f));
+            lightCubeShader.setMat4("model", model);
+            lightCubeShader.setMat4("view", view);
+            lightCubeShader.setMat4("projection", projection);
+            glBindVertexArray(lightCubeVAO);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            glBindVertexArray(0);
 
 
-        //glDepthFunc(GL_LEQUAL);
-        //skybox->RenderSkybox(view, projection, *m_camera);
-        //glDepthFunc(GL_LESS);
-        //glBindVertexArray(0);
+            //glDepthFunc(GL_LEQUAL);
+            //skybox->RenderSkybox(view, projection, *m_camera);
+            //glDepthFunc(GL_LESS);
+            //glBindVertexArray(0);
 
-		glfwSwapBuffers(m_window);
-		glfwPollEvents();
+            glfwSwapBuffers(m_window);
+            glfwPollEvents();
 	}
 
 	//DeleteBuffers();
