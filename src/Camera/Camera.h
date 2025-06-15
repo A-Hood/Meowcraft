@@ -27,6 +27,10 @@ public:
     glm::mat4 GetViewMatrix() {
         return glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);
     }
+
+    float GetFOV() {
+        return m_FOV;
+    }
 private:
 	int m_ScreenWidth;
 	int m_ScreenHeight;

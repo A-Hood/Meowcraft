@@ -35,16 +35,16 @@ private:
     // TODO - imgui integration for dynamic skybox switching
     std::map<int, std::string> m_skyboxMaps = {
             {1, "Space"},
-            {2, "Sky"}
+            {2, "PinkSky"},
     };
 
     std::vector<std::string> m_faces{
-            "right.jpg",
-            "left.jpg",
-            "top.jpg",
-            "bottom.jpg",
-            "front.jpg",
-            "back.jpg"
+            "right.png",
+            "left.png",
+            "top.png",
+            "bottom.png",
+            "front.png",
+            "back.png"
     };
 
     float m_skyboxVertices[108] = {
