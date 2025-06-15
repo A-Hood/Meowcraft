@@ -75,8 +75,8 @@ void Application::SetInputMode()
 int Application::Run()
 {
 	//Shader ourShader("C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/v.glsl", "C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/f.glsl");
-	Shader shader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
-
+	Shader lightingShader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
+    Shader lightCubeShader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/lightCubeF.glsl");
     Skybox* skybox = new Skybox();
 
     // TODO - Package all vertex information into structs to make my stuff a bit more manageable
@@ -132,14 +132,26 @@ int Application::Run()
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
     // Vertexes
-    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    /*
     // Tex Coords
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    */
     // Normals
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+
+    unsigned int lightCubeVAO;
+    glGenVertexArrays(1, &lightCubeVAO);
+    glBindVertexArray(lightCubeVAO);
+    // we only need to bind to the VBO, the container's VBO's data already contains the data.
+    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+    // set the vertex attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
     unsigned int cubeTexture;
     glGenTextures(1, &cubeTexture);
@@ -171,9 +183,11 @@ int Application::Run()
         std::cout << "Texture failed to load at path: " << "C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Textures/container.jpg" << std::endl;
         stbi_image_free(data);
     }
-    
-    shader.use();
-    shader.setInt("texture1",0);
+
+    // don't forget to use the corresponding shader program first (to set the uniform)
+    lightingShader.use();
+    lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+    lightingShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -193,13 +207,21 @@ int Application::Run()
 		// ------
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        shader.use();
+        glm::vec3 lightPos(1.0f, 0.5f, 1.0f);
+        lightPos.x = 1.0f + cos(glfwGetTime()) * 2.0f;
+        lightPos.z = 1.0f + cos(glfwGetTime()) * 2.0f;
+        //lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
+
+        lightingShader.use();
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = m_camera->GetViewMatrix();
         glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetFOV()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-        shader.setMat4("model", model);
-        shader.setMat4("view", view);
-        shader.setMat4("projection", projection);
+        //model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+        lightingShader.setMat4("model", model);
+        lightingShader.setMat4("view", view);
+        lightingShader.setMat4("projection", projection);
+        lightingShader.setVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);
+        lightingShader.setVec3("viewPos", m_camera->GetCameraPos().x, m_camera->GetCameraPos().y, m_camera->GetCameraPos().z);
 
         // cubes
         glBindVertexArray(cubeVAO);
@@ -208,11 +230,24 @@ int Application::Run()
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
 
-
-        glDepthFunc(GL_LEQUAL);
-        skybox->RenderSkybox(view, projection, *m_camera);
-        glDepthFunc(GL_LESS);
+        // light cube
+        lightCubeShader.use();
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.2f));
+        lightCubeShader.setMat4("model", model);
+        lightCubeShader.setMat4("view", view);
+        lightCubeShader.setMat4("projection", projection);
+        glBindVertexArray(lightCubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
+
+
+        //glDepthFunc(GL_LEQUAL);
+        //skybox->RenderSkybox(view, projection, *m_camera);
+        //glDepthFunc(GL_LESS);
+        //glBindVertexArray(0);
 
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();
