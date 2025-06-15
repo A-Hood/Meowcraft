@@ -10,8 +10,11 @@
 #include <stb_image/stb_image.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+
 #include "../Camera/Camera.h"
 #include "../Shader/Shader.h"
+#include "../Skybox/Skybox.h"
 
 const int SCREEN_WIDTH = 1920;
 const int SCREEN_HEIGHT = 1080;

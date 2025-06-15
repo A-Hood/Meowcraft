@@ -74,7 +74,10 @@ void Application::SetInputMode()
 
 int Application::Run()
 {
-	Shader ourShader("C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/v.glsl", "C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/f.glsl");
+	//Shader ourShader("C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/v.glsl", "C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/f.glsl");
+	Shader ourShader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
+
+    Skybox* skybox = new Skybox();
 
 	float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -202,6 +205,8 @@ int Application::Run()
 		ourShader.setMat4("model", model);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        skybox->RenderSkybox(view, projection, *m_camera);
 
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();

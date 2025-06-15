@@ -24,6 +24,9 @@ public:
 	void MouseInput(float deltaTime, double xpos, double ypos);
 	void MouseScrollInput(double xoffset, double yoffset);
 
+    glm::mat4 GetViewMatrix() {
+        return glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);
+    }
 private:
 	int m_ScreenWidth;
 	int m_ScreenHeight;
