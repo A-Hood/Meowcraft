@@ -79,49 +79,50 @@ int Application::Run()
 
     Skybox* skybox = new Skybox();
 
+    // TODO - Package all vertex information into structs to make my stuff a bit more manageable
     float cubeVertices[] = {
-            // positions          // texture Coords
-            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+            // vertex             // tex       // normals
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  0.0f, 0.0f, -1.0f,
+            0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  0.0f, 0.0f, -1.0f,
+            0.5f, 0.5f, -0.5f,    1.0f, 1.0f,  0.0f, 0.0f, -1.0f,
+            0.5f, 0.5f, -0.5f,    1.0f, 1.0f,  0.0f, 0.0f, -1.0f,
+            -0.5f, 0.5f, -0.5f,   0.0f, 1.0f,  0.0f, 0.0f, -1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  0.0f, 0.0f, -1.0f,
 
-            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-            0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-            -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+            -0.5f, -0.5f, 0.5f,   0.0f, 0.0f,  0.0f, 0.0f, 1.0f,
+            0.5f, -0.5f, 0.5f,    1.0f, 0.0f,  0.0f, 0.0f, 1.0f,
+            0.5f, 0.5f, 0.5f,     1.0f, 1.0f,  0.0f, 0.0f, 1.0f,
+            0.5f, 0.5f, 0.5f,     1.0f, 1.0f,  0.0f, 0.0f, 1.0f,
+            -0.5f, 0.5f, 0.5f,    0.0f, 1.0f,  0.0f, 0.0f, 1.0f,
+            -0.5f, -0.5f, 0.5f,   0.0f, 0.0f,  0.0f, 0.0f, 1.0f,
 
-            -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-            -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-            -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+            -0.5f, 0.5f, 0.5f,    1.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
+            -0.5f, 0.5f, -0.5f,   1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, 0.5f,   0.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
+            -0.5f, 0.5f, 0.5f,    1.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
 
-            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+            0.5f, 0.5f, 0.5f,     1.0f, 0.0f,  1.0f, 0.0f, 0.0f,
+            0.5f, 0.5f, -0.5f,    1.0f, 1.0f,  1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,   0.0f, 1.0f,  1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,   0.0f, 1.0f,  1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, 0.5f,    0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
+            0.5f, 0.5f, 0.5f,     1.0f, 0.0f,  1.0f, 0.0f, 0.0f,
 
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-            0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-            0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  0.0f, -1.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,   1.0f, 1.0f,  0.0f, -1.0f, 0.0f,
+            0.5f, -0.5f, 0.5f,    1.0f, 0.0f,  0.0f, -1.0f, 0.0f,
+            0.5f, -0.5f, 0.5f,    1.0f, 0.0f,  0.0f, -1.0f, 0.0f,
+            -0.5f, -0.5f, 0.5f,   0.0f, 0.0f,  0.0f, -1.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  0.0f, -1.0f, 0.0f,
 
-            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-            -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f
+            -0.5f, 0.5f, -0.5f,   0.0f, 1.0f,  0.0f, 1.0f, 0.0f,
+            0.5f, 0.5f, -0.5f,    1.0f, 1.0f,  0.0f, 1.0f, 0.0f,
+            0.5f, 0.5f, 0.5f,     1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            0.5f, 0.5f, 0.5f,     1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            -0.5f, 0.5f, 0.5f,    0.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            -0.5f, 0.5f, -0.5f,   0.0f, 1.0f,  0.0f, 1.0f, 0.0f
     };
 
     unsigned int cubeVAO, cubeVBO;
@@ -130,10 +131,15 @@ int Application::Run()
     glBindVertexArray(cubeVAO);
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
+    // Vertexes
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    // Tex Coords
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    // Normals
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 
     unsigned int cubeTexture;
     glGenTextures(1, &cubeTexture);
