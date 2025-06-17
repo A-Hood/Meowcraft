@@ -28,15 +28,22 @@ unsigned int Skybox::InitialiseSkyboxTexture(std::vector<std::string> faces, int
     for (unsigned int i = 0; i < m_faces.size(); i++)
     {
         path = m_skyboxAssetsPath + "/" + m_skyboxMaps[skyboxID] + "/" + m_faces[i];
-        std::cout << path << std::endl;
+        std::cout << "Attempting to load skybox texture from path: " << path << std::endl;
         unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-        std::cout << "Gets here 1" << std::endl;
         if (data)
         {
+            GLenum format;
+            if (nrChannels == 1)
+                format = GL_RED;
+            else if (nrChannels == 3)
+                format = GL_RGB;
+            else if (nrChannels == 4)
+                format = GL_RGBA;
+
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                         0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+                         0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data
             );
-            std::cout << "Gets here 2" << std::endl;
+            std::cout << "Loaded successfully" << std::endl;
             stbi_image_free(data);
         }
         else
@@ -54,7 +61,7 @@ unsigned int Skybox::InitialiseSkyboxTexture(std::vector<std::string> faces, int
 }
 
 void Skybox::InitialiseCubeMap() {
-    m_cubemapTexture = InitialiseSkyboxTexture(m_faces, 2);
+    m_cubemapTexture = InitialiseSkyboxTexture(m_faces, 1);
 }
 
 void Skybox::InitialiseBuffers() {
