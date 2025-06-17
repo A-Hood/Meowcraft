@@ -207,10 +207,8 @@ int Application::Run()
             // ------
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            glm::vec3 lightPos(1.0f, 0.5f, 1.0f);
-            lightPos.x = 1.0f + cos(glfwGetTime()) * 2.0f;
-            lightPos.z = 1.0f + cos(glfwGetTime()) * 2.0f;
-            //lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
+            glm::vec3 lightPos(1.5f, 0.0f, 1.0f);
+            lightPos.x = sin(glfwGetTime() / 2.0f) * 2.0f;
 
             lightingShader.use();
             glm::mat4 model = glm::mat4(1.0f);
@@ -244,10 +242,10 @@ int Application::Run()
             glBindVertexArray(0);
 
 
-            //glDepthFunc(GL_LEQUAL);
-            //skybox->RenderSkybox(view, projection, *m_camera);
-            //glDepthFunc(GL_LESS);
-            //glBindVertexArray(0);
+            glDepthFunc(GL_LEQUAL);
+            skybox->RenderSkybox(view, projection, *m_camera);
+            glDepthFunc(GL_LESS);
+            glBindVertexArray(0);
 
             glfwSwapBuffers(m_window);
             glfwPollEvents();
