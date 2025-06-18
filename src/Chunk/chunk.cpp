@@ -1,6 +1,8 @@
 #include "chunk.h"
 #include "../Block/blockconstants.h"
 
+// TODO: Add greedymesh algorithm to cut down on more tris.
+
 struct AdjacentBlockPositions {
     void update(int x, int y, int z)
     {
@@ -31,6 +33,8 @@ Chunk::Chunk() {
     std::cout << "Initialised Shaders" << std::endl;
 }
 
+// Initialise blocks in chunk
+// TODO: Add noise to randomise heights
 void Chunk::InitChunk() {
     for (int y = 0; y < CHUNK_SIZE; ++y) { // y axis
         for (int x = 0; x < CHUNK_SIZE; ++x){ // x axis
@@ -52,55 +56,47 @@ void Chunk::BuildMesh()
         int y = i / (CHUNK_SIZE * CHUNK_SIZE);
         int z = (i / CHUNK_SIZE) % CHUNK_SIZE;
 
-        //std::cout << i << std::endl;
         adjacent.update(x, y, z);
-        //std::cout << adjacent.down.x << ", " << adjacent.down.y << ", " << adjacent.down.z << std::endl;
 
         if(ShouldAddFace(TOP_FACE, adjacent.up))
         {
             AddFace(TOP_FACE, glm::vec3(x, y, z));
-            //std::cout << "TOP_FACE" << std::endl;
         }
         if(ShouldAddFace(BOTTOM_FACE, adjacent.down))
         {
             AddFace(BOTTOM_FACE, glm::vec3(x, y, z));
-            //std::cout << "BOTTOM_FACE" << std::endl;
         }
         if(ShouldAddFace(LEFT_FACE, adjacent.left))
         {
             AddFace(LEFT_FACE, glm::vec3(x, y, z));
-            //std::cout << "LEFT_FACE" << std::endl;
         }
         if(ShouldAddFace(RIGHT_FACE, adjacent.right))
         {
             AddFace(RIGHT_FACE, glm::vec3(x, y, z));
-            //std::cout << "RIGHT_FACE" << std::endl;
         }
         if(ShouldAddFace(FRONT_FACE, adjacent.front))
         {
             AddFace(FRONT_FACE, glm::vec3(x, y, z));
-            //std::cout << "FRONT_FACE" << std::endl;
         }
         if(ShouldAddFace(BACK_FACE, adjacent.back))
         {
             AddFace(BACK_FACE, glm::vec3(x, y, z));
-            //std::cout << "BACK_FACE" << std::endl;
         }
     }
     std::cout << "Size of mesh: " << mChunkVertices.size() << std::endl;
 }
 
 bool Chunk::ShouldAddFace(const std::array<float, 18> &face, const glm::vec3 &position) {
+    // oob check
     if (position.x >= CHUNK_SIZE || position.x < 0 ||
-       position.y >= CHUNK_SIZE || position.y < 0 ||
-       position.z >= CHUNK_SIZE || position.z < 0 ) {
-        std::cout << position.x << ", " << position.y << ", " << position.z << std::endl;
+        position.y >= CHUNK_SIZE || position.y < 0 ||
+        position.z >= CHUNK_SIZE || position.z < 0 ) {
         return true;
     }
 
+    // check whether block at index
     if (mBlocksInChunk[GetIndex(position)] == NULL)
     {
-        std::cout << position.x << ", " << position.y << ", " << position.z << std::endl;
         return true;
     }
 
@@ -108,7 +104,6 @@ bool Chunk::ShouldAddFace(const std::array<float, 18> &face, const glm::vec3 &po
 }
 
 int Chunk::GetIndex(const glm::vec3 &position) {
-    std::cout << position.y * CHUNK_AREA + position.z * CHUNK_SIZE + position.x << std::endl;
     return position.y * CHUNK_AREA + position.z * CHUNK_SIZE + position.x;
 }
 
@@ -123,6 +118,7 @@ void Chunk::AddFace(const std::array<float, 18> &face, const glm::vec3 &position
     }
 }
 
+// opengl render stuffsies
 void Chunk::InitBuffers()
 {
     glGenVertexArrays(1, &mVAO);
@@ -136,7 +132,6 @@ void Chunk::InitBuffers()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 }
-
 void Chunk::InitShaders()
 {
     mShader = new Shader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
@@ -144,7 +139,6 @@ void Chunk::InitShaders()
     mShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
     mShader->setVec3("lightColor",  1.0f, 1.0f, 1.0f);
 }
-
 void Chunk::Render()
 {
     glBindVertexArray(mVAO);
