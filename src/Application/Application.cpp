@@ -3,14 +3,13 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+#include "../Chunk/chunk.h"
+
+#include "../ErrorHandling/errorReporting.h"
 
 Application::Application()
 {
 	Init();
-}
-
-Application::~Application()
-{
 }
 
 void Application::Init()
@@ -91,6 +90,8 @@ void Application::SetInputMode(bool active)
 
 int Application::Run()
 {
+    enableReportGlErrors();
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -106,6 +107,8 @@ int Application::Run()
 	Shader lightingShader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
     Shader lightCubeShader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/lightCubeF.glsl");
     Skybox* skybox = new Skybox();
+
+    Chunk chunk;
 
     // TODO - Package all vertex information into structs to make my stuff a bit more manageable
     float cubeVertices[] = {
@@ -172,6 +175,7 @@ int Application::Run()
     glEnableVertexAttribArray(1);
 
 
+    /*
     unsigned int lightCubeVAO;
     glGenVertexArrays(1, &lightCubeVAO);
     glBindVertexArray(lightCubeVAO);
@@ -180,7 +184,7 @@ int Application::Run()
     // set the vertex attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-
+*/
     unsigned int cubeTexture;
     glGenTextures(1, &cubeTexture);
     int width, height, nrComponents;
@@ -195,7 +199,7 @@ int Application::Run()
         else if (nrComponents == 4)
             format = GL_RGBA;
 
-            glBindTexture(GL_TEXTURE_2D, cubeTexture);
+        glBindTexture(GL_TEXTURE_2D, cubeTexture);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -217,14 +221,14 @@ int Application::Run()
     lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
     lightingShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 
-	// render loop
+    // render loop
 	while (!glfwWindowShouldClose(m_window))
 	{
             // Delta time
@@ -255,12 +259,16 @@ int Application::Run()
             lightingShader.setVec3("viewPos", m_camera->GetCameraPos().x, m_camera->GetCameraPos().y, m_camera->GetCameraPos().z);
 
             // cubes
-            glBindVertexArray(cubeVAO);
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, cubeTexture);
+            /*
+            glBindVertexArray(cubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
+             */
+            chunk.Render();
 
+            /*
             // light cube
             lightCubeShader.use();
             model = glm::mat4(1.0f);
@@ -273,13 +281,14 @@ int Application::Run()
             glBindVertexArray(lightCubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
+*/
 
-
+            /*
             glDepthFunc(GL_LEQUAL);
             skybox->RenderSkybox(view, projection, *m_camera);
             glDepthFunc(GL_LESS);
             glBindVertexArray(0);
-
+*/
             SwapBuffers(m_window);
             glfwPollEvents();
 	}
@@ -302,7 +311,7 @@ void Application::SwapBuffers(GLFWwindow *window)
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 }
 
 void Application::FramebufferSizeCallback(GLFWwindow* window, int width, int height)
@@ -334,6 +343,4 @@ void Application::MouseInputFunc(GLFWwindow* window, double xpos, double ypos)
 	    camera->ProcessInput(m_window, m_deltaTime);
 
      m_mouseActivateButtonPreviouslyPressed = glfwGetKey(m_window, GLFW_KEY_F1);
-
-     std::cout << m_mouseActive << std::endl;
  }
