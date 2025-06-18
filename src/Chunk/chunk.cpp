@@ -12,12 +12,13 @@ Chunk::Chunk() {
 }
 
 void Chunk::InitChunk() {
-    int y = 0;
-    for (int i = 0; i < CHUNK_WIDTH; i++) { // x axis
-        for (int j = 0; j < CHUNK_WIDTH; j++){ // y axis
-            Block* block = new Block(BlockData::Type::DIRT);
-            block->SetBlockPos(glm::vec3(i, y, j));
-            mBlocksInChunk.push_back(block);
+    for (int y = 0; y < CHUNK_SIZE; ++y) { // y axis
+        for (int x = 0; x < CHUNK_SIZE; ++x){ // x axis
+            for (int z = 0; z < CHUNK_SIZE; ++z) { // z axis
+                Block *block = new Block(BlockData::Type::DIRT);
+                block->SetBlockPos(glm::vec3(x, y, z));
+                mBlocksInChunk.push_back(block);
+            }
         }
     }
 }

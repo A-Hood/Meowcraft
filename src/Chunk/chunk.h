@@ -9,7 +9,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-const int CHUNK_WIDTH = 16;
+const int CHUNK_SIZE = 16;
+const int CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE;
+
+// to create chunk, loop through
 
 class Chunk {
 public:
