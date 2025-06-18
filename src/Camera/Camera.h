@@ -16,6 +16,8 @@ public:
 		return m_CameraPos;
 	}
 
+    void SetMouseActiveBool(const bool value) { m_mouseActive = value; }
+
 public:
 	glm::mat4 UpdateView(float deltaTime);
 	glm::mat4 UpdatePerspective();
@@ -45,5 +47,7 @@ private:
 	float m_LastX;
 	float m_LastY;
 	float m_FOV = 45.0f;
+
+    bool m_mouseActive = false;
 };
 #endif

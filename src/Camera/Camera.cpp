@@ -45,6 +45,9 @@ void Camera::ProcessInput(GLFWwindow* window, float deltaTime)
 
 void Camera::MouseInput(float deltaTime, double xpos, double ypos)
 {
+    if (m_mouseActive)
+        return;
+
 	if (m_FirstMouse)
 	{
 		m_LastX = xpos;

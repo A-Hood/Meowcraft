@@ -21,11 +21,12 @@ set(LIBS ${LIBS} GLAD)
 # Get all source files
 # TODO - Rework to allow for multiple files in the src directory
 file(GLOB_RECURSE source "src/*.cpp" "src/*.h")
-
 file(GLOB shaders "src/Assets/Shaders/*.glsl")
+set(ALL_SOURCE ${source} ${shaders}) # Add all source files to one var
 
-set(ALL_SOURCE ${source} ${shaders})
+file(GLOB imgui_source "includes/imgui/*.cpp" "includes/imgui/*.h")
+#set(ALL_SOURCE ${ALL_SOURCE} ${imgui_source}) # Add imgui
 
-add_executable(Meowcraft ${ALL_SOURCE})
+add_executable(Meowcraft ${ALL_SOURCE} ${imgui_source})
 include_directories(${CMAKE_SOURCE_DIR}/includes)
 target_link_libraries(Meowcraft ${LIBS})

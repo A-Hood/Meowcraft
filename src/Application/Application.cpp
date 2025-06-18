@@ -1,4 +1,8 @@
 #include "Application.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 
 Application::Application()
 {
@@ -15,7 +19,7 @@ void Application::Init()
 	InitWindow();
 	InitCamera(); // TODO: add the ability to add more camera
 
-	SetInputMode();
+	SetInputMode(m_mouseActive);
 }
 
 int Application::InitWindow()
@@ -57,23 +61,47 @@ void Application::InitCallbacks()
 		auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
 		glViewport(0, 0, width, height);
 		});
-	glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos) {
-		auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
-		app->MouseInputFunc(window, xpos, ypos);
-		});
+    glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos) {
+        auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
+        app->MouseInputFunc(window, xpos, ypos);
+    });
 	glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset) {
 		auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
 		app->ScrollInputFunc(window, xoffset, yoffset);
 		});
 }
 
-void Application::SetInputMode()
+void Application::SetInputMode(bool active)
 {
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // if mouse currently is active - disable mouse
+    if(active)
+    {
+        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        m_mouseActive = !m_mouseActive;
+        m_camera->SetMouseActiveBool(m_mouseActive);
+        std::cout << "Disabled cursor" << std::endl;
+        return;
+    }
+    // if mouse is not currently active - enable mouse
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    m_mouseActive = !m_mouseActive;
+    m_camera->SetMouseActiveBool(m_mouseActive);
+    std::cout << "Activated cursor" << std::endl;
 }
 
 int Application::Run()
 {
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+// Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+    ImGui_ImplOpenGL3_Init();
+
 	//Shader ourShader("C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/v.glsl", "C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/f.glsl");
 	Shader lightingShader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
     Shader lightCubeShader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/lightCubeF.glsl");
@@ -191,6 +219,11 @@ int Application::Run()
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    ImGui::ShowDemoWindow();
+
 	// render loop
 	while (!glfwWindowShouldClose(m_window))
 	{
@@ -247,35 +280,30 @@ int Application::Run()
             glDepthFunc(GL_LESS);
             glBindVertexArray(0);
 
-            glfwSwapBuffers(m_window);
+            SwapBuffers(m_window);
             glfwPollEvents();
 	}
 
-	//DeleteBuffers();
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 	glfwTerminate();
 	return 0;
 }
 
-void Application::Update()
+void Application::SwapBuffers(GLFWwindow *window)
 {
-	// run update on input and stuff here
-}
+    ImGui::EndFrame();
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-/*
-void Application::Render()
-{
-	for (unsigned int i = 0; i < m_renderQueue.size(); ++i) {
-		m_renderQueue[i].Draw();
-	}
-}
+    glfwSwapBuffers(window);
 
-void Application::DeleteBuffers()
-{
-	for (unsigned int i = 0; i < m_renderQueue.size(); ++i) {
-		m_renderQueue[i].DeleteBuffers();
-	}
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    ImGui::ShowDemoWindow();
 }
-*/
 
 void Application::FramebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
@@ -299,5 +327,13 @@ void Application::MouseInputFunc(GLFWwindow* window, double xpos, double ypos)
 	 if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		 glfwSetWindowShouldClose(m_window, true);
 
-	 camera->ProcessInput(m_window, m_deltaTime);
+     if ((glfwGetKey(m_window, GLFW_KEY_F1) == GLFW_PRESS) && !m_mouseActivateButtonPreviouslyPressed)
+         SetInputMode(m_mouseActive);
+
+     if (!m_mouseActive)
+	    camera->ProcessInput(m_window, m_deltaTime);
+
+     m_mouseActivateButtonPreviouslyPressed = glfwGetKey(m_window, GLFW_KEY_F1);
+
+     std::cout << m_mouseActive << std::endl;
  }

@@ -61,7 +61,7 @@ unsigned int Skybox::InitialiseSkyboxTexture(std::vector<std::string> faces, int
 }
 
 void Skybox::InitialiseCubeMap() {
-    m_cubemapTexture = InitialiseSkyboxTexture(m_faces, 1);
+    m_cubemapTexture = InitialiseSkyboxTexture(m_faces, 2);
 }
 
 void Skybox::InitialiseBuffers() {
