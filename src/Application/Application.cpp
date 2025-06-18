@@ -99,134 +99,21 @@ int Application::Run()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-// Setup Platform/Renderer backends
+    // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(m_window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
     ImGui_ImplOpenGL3_Init();
 
-	//Shader ourShader("C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/v.glsl", "C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Shaders/f.glsl");
-	Shader lightingShader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
-    Shader lightCubeShader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/lightCubeF.glsl");
+	Shader shader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
     Skybox* skybox = new Skybox();
 
     Chunk chunk;
 
-    // TODO - Package all vertex information into structs to make my stuff a bit more manageable
-    float cubeVertices[] = {
-            // vertex             // tex       // normals
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  0.0f, 0.0f, -1.0f,
-            0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  0.0f, 0.0f, -1.0f,
-            0.5f, 0.5f, -0.5f,    1.0f, 1.0f,  0.0f, 0.0f, -1.0f,
-            0.5f, 0.5f, -0.5f,    1.0f, 1.0f,  0.0f, 0.0f, -1.0f,
-            -0.5f, 0.5f, -0.5f,   0.0f, 1.0f,  0.0f, 0.0f, -1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  0.0f, 0.0f, -1.0f,
-
-            -0.5f, -0.5f, 0.5f,   0.0f, 0.0f,  0.0f, 0.0f, 1.0f,
-            0.5f, -0.5f, 0.5f,    1.0f, 0.0f,  0.0f, 0.0f, 1.0f,
-            0.5f, 0.5f, 0.5f,     1.0f, 1.0f,  0.0f, 0.0f, 1.0f,
-            0.5f, 0.5f, 0.5f,     1.0f, 1.0f,  0.0f, 0.0f, 1.0f,
-            -0.5f, 0.5f, 0.5f,    0.0f, 1.0f,  0.0f, 0.0f, 1.0f,
-            -0.5f, -0.5f, 0.5f,   0.0f, 0.0f,  0.0f, 0.0f, 1.0f,
-
-            -0.5f, 0.5f, 0.5f,    1.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
-            -0.5f, 0.5f, -0.5f,   1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
-            -0.5f, -0.5f, 0.5f,   0.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
-            -0.5f, 0.5f, 0.5f,    1.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
-
-            0.5f, 0.5f, 0.5f,     1.0f, 0.0f,  1.0f, 0.0f, 0.0f,
-            0.5f, 0.5f, -0.5f,    1.0f, 1.0f,  1.0f, 0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,   0.0f, 1.0f,  1.0f, 0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,   0.0f, 1.0f,  1.0f, 0.0f, 0.0f,
-            0.5f, -0.5f, 0.5f,    0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
-            0.5f, 0.5f, 0.5f,     1.0f, 0.0f,  1.0f, 0.0f, 0.0f,
-
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  0.0f, -1.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,   1.0f, 1.0f,  0.0f, -1.0f, 0.0f,
-            0.5f, -0.5f, 0.5f,    1.0f, 0.0f,  0.0f, -1.0f, 0.0f,
-            0.5f, -0.5f, 0.5f,    1.0f, 0.0f,  0.0f, -1.0f, 0.0f,
-            -0.5f, -0.5f, 0.5f,   0.0f, 0.0f,  0.0f, -1.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  0.0f, -1.0f, 0.0f,
-
-            -0.5f, 0.5f, -0.5f,   0.0f, 1.0f,  0.0f, 1.0f, 0.0f,
-            0.5f, 0.5f, -0.5f,    1.0f, 1.0f,  0.0f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.5f,     1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.5f,     1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-            -0.5f, 0.5f, 0.5f,    0.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-            -0.5f, 0.5f, -0.5f,   0.0f, 1.0f,  0.0f, 1.0f, 0.0f
-    };
-
-    unsigned int cubeVAO, cubeVBO;
-    glGenVertexArrays(1, &cubeVAO);
-    glGenBuffers(1, &cubeVBO);
-    glBindVertexArray(cubeVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
-    // Vertexes
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    /*
-    // Tex Coords
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    */
-    // Normals
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-
-    /*
-    unsigned int lightCubeVAO;
-    glGenVertexArrays(1, &lightCubeVAO);
-    glBindVertexArray(lightCubeVAO);
-    // we only need to bind to the VBO, the container's VBO's data already contains the data.
-    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    // set the vertex attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-*/
-    unsigned int cubeTexture;
-    glGenTextures(1, &cubeTexture);
-    int width, height, nrComponents;
-    unsigned char *data = stbi_load("C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Textures/container.jpg", &width, &height, &nrComponents, 0);
-    if (data)
-    {
-        GLenum format;
-        if (nrComponents == 1)
-            format = GL_RED;
-        else if (nrComponents == 3)
-            format = GL_RGB;
-        else if (nrComponents == 4)
-            format = GL_RGBA;
-
-        glBindTexture(GL_TEXTURE_2D, cubeTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        std::cout << "Texture failed to load at path: " << "C:/Users/dabpo/Documents/GitHub/Meowcraft/src/Assets/Textures/container.jpg" << std::endl;
-        stbi_image_free(data);
-    }
-
-    // don't forget to use the corresponding shader program first (to set the uniform)
-    lightingShader.use();
-    lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-    lightingShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
-
+    // Wireframe
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    //ImGui::ShowDemoWindow();
 
     // render loop
 	while (!glfwWindowShouldClose(m_window))
@@ -237,58 +124,31 @@ int Application::Run()
             m_lastFrame = currentFrame;
 
             // input
-            // -----
             ProcessInput(m_camera);
 
             // render
-            // ------
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            glm::vec3 lightPos(1.5f, 0.0f, 1.0f);
-            lightPos.x = sin(glfwGetTime() / 2.0f) * 2.0f;
-
-            lightingShader.use();
+            // Apply shader and set uniforms
+            shader.use();
             glm::mat4 model = glm::mat4(1.0f);
             glm::mat4 view = m_camera->GetViewMatrix();
             glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetFOV()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-            //model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-            lightingShader.setMat4("model", model);
-            lightingShader.setMat4("view", view);
-            lightingShader.setMat4("projection", projection);
-            lightingShader.setVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);
-            lightingShader.setVec3("viewPos", m_camera->GetCameraPos().x, m_camera->GetCameraPos().y, m_camera->GetCameraPos().z);
+            shader.setMat4("model", model);
+            shader.setMat4("view", view);
+            shader.setMat4("projection", projection);
+            shader.setVec3("viewPos", m_camera->GetCameraPos().x, m_camera->GetCameraPos().y, m_camera->GetCameraPos().z);
 
-            // cubes
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, cubeTexture);
-            /*
-            glBindVertexArray(cubeVAO);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-            glBindVertexArray(0);
-             */
+            // Render chunk
             chunk.Render();
 
-            /*
-            // light cube
-            lightCubeShader.use();
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, lightPos);
-            //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(0.2f));
-            lightCubeShader.setMat4("model", model);
-            lightCubeShader.setMat4("view", view);
-            lightCubeShader.setMat4("projection", projection);
-            glBindVertexArray(lightCubeVAO);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-            glBindVertexArray(0);
-*/
-
+            // Skybox rendering
             /*
             glDepthFunc(GL_LEQUAL);
             skybox->RenderSkybox(view, projection, *m_camera);
             glDepthFunc(GL_LESS);
             glBindVertexArray(0);
-*/
+            */
             SwapBuffers(m_window);
             glfwPollEvents();
 	}
