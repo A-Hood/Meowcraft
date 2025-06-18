@@ -1,6 +1,6 @@
 # Meowcraft
 
-In development minecraft-esque voxel based game thingy
+First attempt at creating a voxel-based procedurally generated world utilising OpenGL!
 
 ## Third-Party:
 - GLFW
@@ -10,5 +10,13 @@ In development minecraft-esque voxel based game thingy
 - stb_image
   
 ## Requirements
-
 Compiler version: C++17
+
+## Build:
+Windows (Only Tested)
+```
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
