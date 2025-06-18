@@ -23,7 +23,6 @@ class Application
 {
 public:
 	Application();
-	~Application();
 	
 	void Init();
 	int InitWindow();
@@ -37,12 +36,6 @@ public:
 
 	void Update();
 	void Render();
-
-	/*
-	void AddToRenderQueue(Mesh& mesh) {
-		m_renderQueue.push_back(mesh);
-	}
-	*/
 
 	void SwapBuffers(GLFWwindow *window);
 
