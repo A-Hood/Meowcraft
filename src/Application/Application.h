@@ -11,6 +11,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 #include "../Camera/Camera.h"
 #include "../Shader/Shader.h"
@@ -29,6 +32,8 @@ public:
 	void InitCamera();
 	void InitCallbacks();
 
+    void InitImGui();
+
 	void SetInputMode(bool active); // just make it cursor for now
 	void ProcessInput(Camera* camera);
 
@@ -37,7 +42,7 @@ public:
 	void Update();
 	void Render();
 
-	void SwapBuffers(GLFWwindow *window);
+	void SwapBuffers(GLFWwindow *window, bool* p_open);
 
 private:
 	void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
@@ -49,7 +54,10 @@ private:
 	GLFWwindow* m_window;
 	Camera* m_camera;
 
-	float m_deltaTime = 0.0f;	// Time between current frame and last frame
+    ImGuiIO mIO;
+    ImGuiWindowFlags window_flags;
+
+    float m_deltaTime = 0.0f;	// Time between current frame and last frame
     float m_lastFrame = 0.0f; // Time of last frame
 
     bool m_mouseActive = true;

@@ -1,11 +1,12 @@
 #include "Application.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
 
 #include "../World/Chunk/chunk.h"
 
 #include "../ErrorHandling/errorReporting.h"
+
+// TODO: Move all imgui logic to it's own class for better code organisation.
+// TODO: Refactor some of this class because it is a mess.
+// TODO: Work on texture atlas... and get more than just 1 lonely chunk rendering
 
 Application::Application()
 {
@@ -88,20 +89,39 @@ void Application::SetInputMode(bool active)
     std::cout << "Activated cursor" << std::endl;
 }
 
+void Application::InitImGui() {
+    // Setup Dear ImGui context
+    mIO = ImGui::GetIO();
+    mIO.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    mIO.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+    ImGui_ImplOpenGL3_Init();
+
+    const float PAD = 10.0f;
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+    ImVec2 work_size = viewport->WorkSize;
+    ImVec2 window_pos, window_pos_pivot;
+    window_pos.x = work_pos.x + PAD;
+    window_pos.y = work_pos.y + PAD;
+    window_pos_pivot.x = 1.0f ;
+    window_pos_pivot.y = 1.0f;
+    ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+    window_flags |= ImGuiWindowFlags_NoMove;
+}
+
 int Application::Run()
 {
     enableReportGlErrors();
 
-    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(m_window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-    ImGui_ImplOpenGL3_Init();
+    InitImGui();
+    bool open = true;
+    bool* p_open = &open;
 
 	Shader shader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
     Skybox* skybox = new Skybox();
@@ -114,7 +134,9 @@ int Application::Run()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow();
+    ImGui::Begin("Example: Simple overlay", p_open, window_flags);
+    ImGui::Text("Simple overlay\n" "(right-click to change position)");
+
     // render loop
 	while (!glfwWindowShouldClose(m_window))
 	{
@@ -149,7 +171,7 @@ int Application::Run()
             glDepthFunc(GL_LESS);
             glBindVertexArray(0);
             */
-            SwapBuffers(m_window);
+            SwapBuffers(m_window, p_open);
             glfwPollEvents();
 	}
 
@@ -160,8 +182,9 @@ int Application::Run()
 	return 0;
 }
 
-void Application::SwapBuffers(GLFWwindow *window)
+void Application::SwapBuffers(GLFWwindow *window, bool* p_open)
 {
+    ImGui::End();
     ImGui::EndFrame();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -171,7 +194,9 @@ void Application::SwapBuffers(GLFWwindow *window)
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow();
+    ImGui::Begin("Debug Overlay", p_open, window_flags);
+    ImGui::Text("FPS: %.0f", 1.0f / m_deltaTime);
+    ImGui::Text("Frame Time: %.1fms", m_deltaTime * 1000);
 }
 
 void Application::FramebufferSizeCallback(GLFWwindow* window, int width, int height)
