@@ -2,14 +2,14 @@
 #define CHUNK_H
 
 #include "../Block/block.h"
-#include "../Shader/Shader.h"
-#include <glm/gtc/matrix_transform.hpp>
+#include "../../Shader/Shader.h"
+#include "glm/gtc/matrix_transform.hpp"
 #include <vector>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
 
-const int CHUNK_SIZE = 16;
+const int CHUNK_SIZE = 32;
 const int CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE;
 const int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
 

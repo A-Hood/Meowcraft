@@ -4,7 +4,7 @@
 #include <iostream>
 #include <array>
 #include <vector>
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
 struct BlockData {
     enum Type {
@@ -33,17 +33,8 @@ class Block {
 public:
     Block(BlockData::Type type, glm::vec3 pos);
 
-    //glm::vec3 GetBlockPos() { return this->mBlockPosition; };
-
-    // TODO - Implement these
-    /*
-    glm::vec2 GetUV();
-    glm::vec3 GetTexCoords();
-    */
-
 private:
     BlockData mData;
-    glm::vec3 mBlockPosition;
 
     // TODO - Add normals/tex coords to apply textures and shading.
 };

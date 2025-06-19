@@ -3,7 +3,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-#include "../Chunk/chunk.h"
+#include "../World/Chunk/chunk.h"
 
 #include "../ErrorHandling/errorReporting.h"
 
@@ -109,7 +109,7 @@ int Application::Run()
     Chunk chunk;
 
     // Wireframe
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
