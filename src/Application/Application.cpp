@@ -56,18 +56,18 @@ void Application::InitCamera()
 
 void Application::InitCallbacks()
 {
-	glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, auto width, auto height) {
-		auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
-		glViewport(0, 0, width, height);
-		});
+    glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, auto width, auto height) {
+        auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
+        glViewport(0, 0, width, height);
+    });
     glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos) {
         auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
         app->MouseInputFunc(window, xpos, ypos);
     });
-	glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset) {
-		auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
-		app->ScrollInputFunc(window, xoffset, yoffset);
-		});
+    glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset) {
+        auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
+        app->ScrollInputFunc(window, xoffset, yoffset);
+    });
 }
 
 void Application::SetInputMode(bool active)
@@ -109,12 +109,12 @@ int Application::Run()
     Chunk chunk;
 
     // Wireframe
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
+    ImGui::ShowDemoWindow();
     // render loop
 	while (!glfwWindowShouldClose(m_window))
 	{
@@ -171,7 +171,7 @@ void Application::SwapBuffers(GLFWwindow *window)
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    //ImGui::ShowDemoWindow();
+    ImGui::ShowDemoWindow();
 }
 
 void Application::FramebufferSizeCallback(GLFWwindow* window, int width, int height)
