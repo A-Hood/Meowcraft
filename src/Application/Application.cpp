@@ -128,8 +128,8 @@ int Application::Run()
 
     std::vector<Chunk> chunks;
 
-    for (int x = 0; x < 5; x++) {
-        for (int z = 0; z < 5; z++) {
+    for (int x = 0; x < 1; x++) {
+        for (int z = 0; z < 1; z++) {
             chunks.emplace_back(glm::ivec3(x, 0, z));
         }
     }
@@ -204,6 +204,7 @@ void Application::SwapBuffers(GLFWwindow *window, bool* p_open)
     ImGui::Begin("Debug Overlay", p_open, window_flags);
     ImGui::Text("FPS: %.0f", 1.0f / m_deltaTime);
     ImGui::Text("Frame Time: %.1fms", m_deltaTime * 1000);
+    ImGui::Text("Position: (%.3f, %.3f, %.3f)", m_camera->GetCameraPos().x ,m_camera->GetCameraPos().y ,m_camera->GetCameraPos().z);
 }
 
 void Application::FramebufferSizeCallback(GLFWwindow* window, int width, int height)
