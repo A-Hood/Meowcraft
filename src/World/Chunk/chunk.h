@@ -2,6 +2,7 @@
 #define CHUNK_H
 
 #include "../Block/block.h"
+#include "chunksegment.h"
 #include "../../Shader/Shader.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <vector>
@@ -9,36 +10,19 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-const int CHUNK_SIZE = 8;
-const int CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE;
-const int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
-
-// to create chunk, loop through
-
 class Chunk {
 public:
     Chunk();
 
-    void InitChunk();
-    void BuildMesh();
-    void InitBuffers();
-    void InitShaders();
+    void CreateSections();
+    void SetBlock(int x, int y, int z);
+    void RenderChunkSections();
 
-    int GetIndex(int x, int y, int z) {
-        return y * CHUNK_AREA + z * CHUNK_SIZE + x;
-    }
-
-    bool ShouldAddFace(const std::array<float, 18> &face, const glm::vec3 &position);
-    int GetIndex(const glm::vec3 &position);
-    void AddFace(const std::array<float, 18> &face, const glm::vec3 &position);
-    void Render();
+    int GetAmountOfBlocksInChunk();
 private:
-    std::vector<Block*> mBlocksInChunk;
-    std::vector<glm::vec3> mChunkVertices;
+    glm::vec3 mLocation;
+    std::vector<ChunkSegment> mChunkSegments;
 
-    Shader* mShader;
-
-    unsigned int mVAO, mVBO;
 };
 
 

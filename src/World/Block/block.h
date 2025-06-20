@@ -6,15 +6,18 @@
 #include <vector>
 #include "glm/glm.hpp"
 
-struct BlockData {
-    enum Type {
-        DIRT,
-        STONE,
-        GRASS,
-        SAND
-    };
+enum class BlockType {
+    air = 0,
+    grass = 1,
+    dirt = 2,
+    stone = 3,
+};
 
-    Type sType;
+struct BlockData {
+    glm::vec2 xTexCoords;
+    glm::vec2 yTexCoords;
+    glm::vec2 zTexCoords;
+
 };
 
 struct MeshFace {
@@ -31,10 +34,15 @@ struct MeshFace {
 
 class Block {
 public:
-    Block(BlockData::Type type, glm::vec3 pos);
+    Block() = default;
+    Block(BlockType type);
+
+    BlockType GetBlockType() {
+        return mType;
+    }
 
 private:
-    BlockData mData;
+    BlockType mType;
 
     // TODO - Add normals/tex coords to apply textures and shading.
 };

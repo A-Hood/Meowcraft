@@ -1,7 +1,6 @@
 #include "block.h"
 
-Block::Block(BlockData::Type type, glm::vec3 pos)
+Block::Block(BlockType type) :
+    mType(type)
 {
-    // store type in data
-    mData.sType = type;
 };
