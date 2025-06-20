@@ -5,10 +5,14 @@ Chunk::Chunk(glm::ivec3 location) :
 {
     CreateSections();
     std::cout << "Created Sections" << std::endl;
-    for (int y = 0; y < CHUNK_SIZE; ++y) { // y axis
+    for (int y = 0; y < CHUNK_SIZE * mChunkSegments.size(); ++y) { // y axis
         for (int x = 0; x < CHUNK_SIZE; ++x){ // x axis
             for (int z = 0; z < CHUNK_SIZE; ++z) { // z axis
-                SetBlock(x, y, z);
+                if (y <= 50)
+                    SetBlock(x, y, z, BlockType::dirt);
+                else
+                    SetBlock(x, y, z, BlockType::air);
+
             }
         }
     }
@@ -24,13 +28,13 @@ void Chunk::CreateSections() {
     }
 }
 
-void Chunk::SetBlock(int x, int y, int z) {
-    if (y <= 0)
+void Chunk::SetBlock(int x, int y, int z, BlockType type) {
+    if (y < 0)
     {
         return;
     }
 
-    Block block = Block(BlockType::dirt);
+    Block block = Block(type);
 
     int blockY = y % CHUNK_SIZE;
     mChunkSegments[y / CHUNK_SIZE].SetBlock(x, blockY, z, block);

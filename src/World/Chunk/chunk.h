@@ -15,7 +15,7 @@ public:
     Chunk(glm::ivec3 location);
 
     void CreateSections();
-    void SetBlock(int x, int y, int z);
+    void SetBlock(int x, int y, int z, BlockType type);
     void RenderChunkSections();
 
     int GetAmountOfBlocksInChunk();
