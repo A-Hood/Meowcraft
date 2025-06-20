@@ -22,5 +22,16 @@ const std::array<float, 18> BACK_FACE { // neg x
 };
 
 
+const std::array<int, 12> X_TEXCOORDS {
+    1, 0,  1, 1,  0, 1,  0, 1,  0, 0,  1, 0
+};
+const std::array<int, 12> Y_TEXCOORDS {
+    0, 1,  1, 1,  1, 0,  1, 0,  0, 0,  0, 1
+};
+const std::array<int, 12> Z_TEXCOORDS {
+    0, 0,  1, 0,  1, 1,  1, 1,  0, 1,  0, 0,
+
+};
+
 
 #endif
