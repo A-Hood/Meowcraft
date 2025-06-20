@@ -41,6 +41,27 @@ public:
         return mType;
     }
 
+    std::string GetTypeString() {
+        switch(mType){
+            case (BlockType::air):
+                return std::string("air");
+                break;
+            case (BlockType::grass):
+                return std::string("grass");
+                break;
+            case (BlockType::dirt):
+                return std::string("dirt");
+                break;
+            case (BlockType::stone):
+                return std::string("stone");
+                break;
+
+            default:
+                return std::string("type unknown");
+        }
+        return std::string("how???");
+    }
+
 private:
     BlockType mType;
 
