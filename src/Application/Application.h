@@ -57,6 +57,8 @@ private:
     ImGuiIO mIO;
     ImGuiWindowFlags window_flags;
 
+    bool mShouldWireFrame = true;
+
     float m_deltaTime = 0.0f;	// Time between current frame and last frame
     float m_lastFrame = 0.0f; // Time of last frame
 

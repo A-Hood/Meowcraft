@@ -103,12 +103,11 @@ void Application::InitImGui() {
     const float PAD = 10.0f;
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
-    ImVec2 work_size = viewport->WorkSize;
     ImVec2 window_pos, window_pos_pivot;
     window_pos.x = work_pos.x + PAD;
     window_pos.y = work_pos.y + PAD;
-    window_pos_pivot.x = 1.0f ;
-    window_pos_pivot.y = 1.0f;
+    window_pos_pivot.x = 0.5f ;
+    window_pos_pivot.y = 0.5f;
     ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
     window_flags |= ImGuiWindowFlags_NoMove;
 }
@@ -134,8 +133,7 @@ int Application::Run()
         }
     }
 
-    // Wireframe
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -150,6 +148,14 @@ int Application::Run()
             float currentFrame = glfwGetTime();
             m_deltaTime = currentFrame - m_lastFrame;
             m_lastFrame = currentFrame;
+
+            // Wireframe
+            if (mShouldWireFrame)
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            else
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+            std::cout << mShouldWireFrame << std::endl;
 
             // input
             ProcessInput(m_camera);
@@ -201,10 +207,16 @@ void Application::SwapBuffers(GLFWwindow *window, bool* p_open)
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+
     ImGui::Begin("Debug Overlay", p_open, window_flags);
     ImGui::Text("FPS: %.0f", 1.0f / m_deltaTime);
     ImGui::Text("Frame Time: %.1fms", m_deltaTime * 1000);
     ImGui::Text("Position: (%.3f, %.3f, %.3f)", m_camera->GetCameraPos().x ,m_camera->GetCameraPos().y ,m_camera->GetCameraPos().z);
+    ImGui::Separator();
+    if(ImGui::SmallButton("Wireframe"))
+        mShouldWireFrame = !mShouldWireFrame;
+
 }
 
 void Application::FramebufferSizeCallback(GLFWwindow* window, int width, int height)
