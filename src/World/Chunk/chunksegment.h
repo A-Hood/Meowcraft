@@ -9,7 +9,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-const int CHUNK_SIZE = 8;
+const int CHUNK_SIZE = 16;
 const int CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE;
 const int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
 
@@ -17,11 +17,11 @@ class ChunkSegment {
 public:
     ChunkSegment(glm::ivec3 location);
 
-    void SetBlock(int x, int y, int z, Block block);
+    void SetBlock(int x, int y, int z, Block &block);
 
     void InitChunkSection();
 
-    void BuildMesh();
+    bool BuildMesh();
     void InitBuffers();
     void InitShaders();
 
@@ -40,6 +40,8 @@ private:
     std::vector<glm::vec3> mChunkVertices;
 
     glm::ivec3 mLocation;
+
+    bool mShouldRender = false;
 
     Shader* mShader;
 
