@@ -38,8 +38,8 @@ int Application::InitWindow()
 	}
 	glfwMakeContextCurrent(m_window);
 	glfwSetWindowUserPointer(m_window, this);
-
-	InitCallbacks();
+    glfwSwapInterval(0);
+    InitCallbacks();
 	// Initiliase glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -162,7 +162,7 @@ int Application::Run()
             shader.setVec3("viewPos", m_camera->GetCameraPos().x, m_camera->GetCameraPos().y, m_camera->GetCameraPos().z);
 
             // Render chunk
-            chunk.Render();
+            chunk.RenderChunkSections();
 
             // Skybox rendering
             /*
