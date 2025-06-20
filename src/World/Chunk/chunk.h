@@ -12,7 +12,7 @@
 
 class Chunk {
 public:
-    Chunk();
+    Chunk(glm::ivec3 location);
 
     void CreateSections();
     void SetBlock(int x, int y, int z);
@@ -20,7 +20,7 @@ public:
 
     int GetAmountOfBlocksInChunk();
 private:
-    glm::vec3 mLocation;
+    glm::ivec3 mLocation;
     std::vector<ChunkSegment> mChunkSegments;
 
 };

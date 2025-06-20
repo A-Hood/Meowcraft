@@ -1,6 +1,8 @@
 #include "chunk.h"
 
-Chunk::Chunk() {
+Chunk::Chunk(glm::ivec3 location) :
+    mLocation(location)
+{
     CreateSections();
     std::cout << "Created Sections" << std::endl;
     for (int y = 0; y < CHUNK_SIZE; ++y) { // y axis
@@ -18,7 +20,7 @@ Chunk::Chunk() {
 
 void Chunk::CreateSections() {
     for(int i = 0; i < CHUNK_SIZE; i++) {
-        mChunkSegments.emplace_back(i);
+        mChunkSegments.emplace_back(glm::ivec3(mLocation.x, i, mLocation.z));
     }
 }
 

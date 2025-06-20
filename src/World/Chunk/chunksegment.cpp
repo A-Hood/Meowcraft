@@ -24,8 +24,8 @@ struct AdjacentBlockPositions {
     glm::vec3 back;
 };
 
-ChunkSegment::ChunkSegment(int y):
-    mLocation(y)
+ChunkSegment::ChunkSegment(glm::ivec3 location):
+    mLocation(location)
 {
 }
 
@@ -112,9 +112,9 @@ int ChunkSegment::GetIndex(const glm::vec3 &position) {
 void ChunkSegment::AddFace(const std::array<float, 18> &face, const glm::vec3 &position) {
     glm::vec3 vertex;
     for(int i = 0; i < sizeof(face) / sizeof(float);) {
-        vertex.x = face[i++] + position.x;
-        vertex.y = face[i++] + position.y + mLocation * CHUNK_SIZE;
-        vertex.z = face[i++] + position.z;
+        vertex.x = face[i++] + position.x + mLocation.x * CHUNK_SIZE;
+        vertex.y = face[i++] + position.y + mLocation.y * CHUNK_SIZE;
+        vertex.z = face[i++] + position.z + mLocation.z * CHUNK_SIZE;
 
         mChunkVertices.push_back(vertex);
     }

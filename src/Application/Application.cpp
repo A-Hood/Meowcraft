@@ -126,7 +126,13 @@ int Application::Run()
 	Shader shader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
     Skybox* skybox = new Skybox();
 
-    Chunk chunk;
+    std::vector<Chunk> chunks;
+
+    for (int x = 0; x < 5; x++) {
+        for (int z = 0; z < 5; z++) {
+            chunks.emplace_back(glm::ivec3(x, 0, z));
+        }
+    }
 
     // Wireframe
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -162,7 +168,8 @@ int Application::Run()
             shader.setVec3("viewPos", m_camera->GetCameraPos().x, m_camera->GetCameraPos().y, m_camera->GetCameraPos().z);
 
             // Render chunk
-            chunk.RenderChunkSections();
+            for (Chunk currentChunk : chunks)
+                currentChunk.RenderChunkSections();
 
             // Skybox rendering
             /*

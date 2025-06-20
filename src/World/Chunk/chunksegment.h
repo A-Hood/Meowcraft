@@ -15,7 +15,7 @@ const int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
 
 class ChunkSegment {
 public:
-    ChunkSegment(int y);
+    ChunkSegment(glm::ivec3 location);
 
     void SetBlock(int x, int y, int z, Block block);
 
@@ -39,7 +39,7 @@ private:
     std::array<Block, CHUNK_VOLUME> mBlocksInChunk;
     std::vector<glm::vec3> mChunkVertices;
 
-    int mLocation;
+    glm::ivec3 mLocation;
 
     Shader* mShader;
 
