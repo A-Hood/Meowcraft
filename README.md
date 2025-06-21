@@ -8,6 +8,7 @@ First attempt at creating a voxel-based procedurally generated world utilising O
 - glm
 - Dear imgui
 - stb_image
+- FastNoiseLite
   
 ## Requirements
 Compiler version: C++17
