@@ -1,0 +1,9 @@
+#ifndef CHUNKCONSTANTS_H
+#define CHUNKCONSTANTS_H
+
+const int CHUNK_SIZE = 8;
+const int CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE;
+const int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
+
+
+#endif
