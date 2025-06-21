@@ -23,8 +23,13 @@ file(GLOB_RECURSE source "src/*.cpp" "src/*.h")
 file(GLOB shaders "src/Assets/Shaders/*.glsl")
 set(ALL_SOURCE ${source} ${shaders}) # Add all source files
 
+# Add imgui
 file(GLOB imgui_source "includes/imgui/*.cpp" "includes/imgui/*.h")
-set(ALL_SOURCE ${ALL_SOURCE} ${imgui_source}) # Add imgui
+set(ALL_SOURCE ${ALL_SOURCE} ${imgui_source})
+
+# Add FastNoiseLite
+file(GLOB fast_noise_lite_source "includes/FastNoiseLite.h")
+set(ALL_SOURCE ${ALL_SOURCE} ${fast_noise_lite_source})
 
 add_executable(Meowcraft ${ALL_SOURCE})
 include_directories(${CMAKE_SOURCE_DIR}/includes)
