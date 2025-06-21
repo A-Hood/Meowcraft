@@ -127,8 +127,9 @@ int Application::Run()
 
     std::vector<Chunk> chunks;
 
-    for (int x = 0; x < 1; x++) {
-        for (int z = 0; z < 1; z++) {
+    const int amount = 5;
+    for (int x = 0; x < amount; x++) {
+        for (int z = 0; z < amount; z++) {
             chunks.emplace_back(glm::ivec3(x, 0, z));
         }
     }
