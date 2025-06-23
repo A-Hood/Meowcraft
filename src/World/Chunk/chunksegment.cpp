@@ -15,7 +15,6 @@ ChunkSegment::ChunkSegment(ChunkManager &chunkManager, glm::ivec3 location):
 void ChunkSegment::MakeMesh() {
     ChunkMeshBuilder(*this, mChunkMesh).BuildMesh();
     std::string hi = std::to_string(mLocation.x) + ", " + std::to_string(mLocation.z);
-    mChunkMesh.SetTest(hi);
     mChunkMesh.InitBuffers();
 
 }

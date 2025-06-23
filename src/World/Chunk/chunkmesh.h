@@ -17,21 +17,17 @@ public:
     void InitBuffers(); // add to builder
 
     void AddFace(const std::array<GLfloat, 18> &face,
+                 const std::array<GLfloat, 12> &texCoords,
                  const glm::vec3 &position,
                  const glm::vec3 chunkLocation);
-
-    void SetTest(std::string hi) { test = hi; }
-    std::string GetTest() { return test; }
 
     void Render();
 private:
     std::vector<GLfloat> mChunkVertices;
+    std::vector<GLfloat> mChunkTexCoords;
     int mAmountOfVertices;
-
-    std::string test;
 
     unsigned int mVAO, mVBO;
 };
-
 
 #endif
