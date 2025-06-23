@@ -1,6 +1,6 @@
 #include "Application.h"
 
-#include "../World/Chunk/chunk.h"
+#include "../World/Chunk/chunkmanager.h"
 
 #include "../ErrorHandling/errorReporting.h"
 
@@ -125,14 +125,8 @@ int Application::Run()
 	Shader shader("../../src/Assets/Shaders/v.glsl", "../../src/Assets/Shaders/f.glsl");
     Skybox* skybox = new Skybox();
 
-    std::vector<Chunk> chunks;
-
-    const int amount = 5;
-    for (int x = 0; x < amount; x++) {
-        for (int z = 0; z < amount; z++) {
-            chunks.emplace_back(glm::ivec3(x, 0, z));
-        }
-    }
+    ChunkManager chunkManager;
+    chunkManager.InitChunks();
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -156,8 +150,6 @@ int Application::Run()
             else
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-            std::cout << mShouldWireFrame << std::endl;
-
             // input
             ProcessInput(m_camera);
 
@@ -175,8 +167,7 @@ int Application::Run()
             shader.setVec3("viewPos", m_camera->GetCameraPos().x, m_camera->GetCameraPos().y, m_camera->GetCameraPos().z);
 
             // Render chunk
-            for (Chunk currentChunk : chunks)
-                currentChunk.RenderChunkSections();
+            chunkManager.RenderChunks();
 
             // Skybox rendering
             /*

@@ -3,26 +3,32 @@
 
 #include "../Block/block.h"
 #include "chunksegment.h"
-#include "../../Shader/Shader.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <vector>
 
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
+#include "chunkconstants.h"
+
+class ChunkManager;
 
 class Chunk {
 public:
-    Chunk(glm::ivec3 location);
+    Chunk() = default;
+    Chunk(ChunkManager &chunkManager, glm::ivec2 location);
 
     void CreateSections();
-    void SetBlock(int x, int y, int z, BlockType type);
-    void RenderChunkSections();
 
-    int GetAmountOfBlocksInChunk();
+    void SetBlock(int x, int y, int z, BlockType type);
+    BlockType GetBlock(int x, int y, int z);
+    int GetIndex(const glm::vec3 &position);
+
+    void RenderChunks();
+
+    bool OutOfBounds(int x, int y, int z) const noexcept;
 private:
-    glm::ivec3 mLocation;
+    glm::ivec2 mLocation;
     std::vector<ChunkSegment> mChunkSegments;
 
+    ChunkManager *mChunkManager;
 };
 
 

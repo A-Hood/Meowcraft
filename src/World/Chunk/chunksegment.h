@@ -9,41 +9,35 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-const int CHUNK_SIZE = 16;
-const int CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE;
-const int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
+#include "chunkconstants.h"
+#include "chunkmesh.h"
+
+class ChunkManager;
 
 class ChunkSegment {
 public:
-    ChunkSegment(glm::ivec3 location);
+    ChunkSegment(ChunkManager &chunkManager, glm::ivec3 location);
+
+    void MakeMesh();
 
     void SetBlock(int x, int y, int z, Block &block);
-
-    void InitChunkSection();
-
-    bool BuildMesh();
-    void InitBuffers();
-    void InitShaders();
-
+    BlockType GetBlock(int x, int y, int z);
     int GetIndex(int x, int y, int z) {
         return y * CHUNK_AREA + z * CHUNK_SIZE + x;
     }
+    const glm::vec3 GetLocation() const;
 
-    bool ShouldAddFace(const std::array<float, 18> &face, const glm::vec3 &position);
-    int GetIndex(const glm::vec3 &position);
-    void AddFace(const std::array<float, 18> &face, const glm::vec3 &position);
-    void Render();
-
-    int GetAmountOfBlocksInSegment();
+    void RenderChunk() {
+        mChunkMesh.Render();
+    }
 private:
     std::array<Block, CHUNK_VOLUME> mBlocksInChunk;
-    std::vector<glm::vec3> mChunkVertices;
+
+    ChunkManager *mChunkManager;
+
+    ChunkMesh mChunkMesh;
 
     glm::ivec3 mLocation;
-
-    bool mShouldRender = false;
-
-    Shader* mShader;
 
     unsigned int mVAO, mVBO;
 };

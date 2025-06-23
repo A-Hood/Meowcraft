@@ -1,6 +1,9 @@
 #include "chunk.h"
 
-Chunk::Chunk(glm::ivec3 location) :
+#include "chunkmanager.h"
+
+Chunk::Chunk(ChunkManager &chunkManager, glm::ivec2 location) :
+    mChunkManager(&chunkManager),
     mLocation(location)
 {
     CreateSections();
@@ -17,14 +20,15 @@ Chunk::Chunk(glm::ivec3 location) :
         }
     }
 
-    for (int i = 0; i < mChunkSegments.size(); i++) {
-        mChunkSegments[i].InitChunkSection();
+    std::cout << "Created Sections at chunk position: " << mLocation.x << ", " << mLocation.y << std::endl;
+    for (ChunkSegment &chunkSeg : mChunkSegments) {
+        chunkSeg.MakeMesh(); // makes and inits buffers
     }
 }
 
 void Chunk::CreateSections() {
     for(int i = 0; i < CHUNK_SIZE; i++) {
-        mChunkSegments.emplace_back(glm::ivec3(mLocation.x, i, mLocation.z));
+        mChunkSegments.emplace_back(*mChunkManager, glm::ivec3(mLocation.x, i, mLocation.y));
     }
 }
 
@@ -35,13 +39,43 @@ void Chunk::SetBlock(int x, int y, int z, BlockType type) {
     }
 
     Block block = Block(type);
-
     int blockY = y % CHUNK_SIZE;
     mChunkSegments[y / CHUNK_SIZE].SetBlock(x, blockY, z, block);
 }
 
-void Chunk::RenderChunkSections() {
-    for (int i = 0; i < mChunkSegments.size(); i++) {
-        mChunkSegments[i].Render();
+/// Use to get block in from chunk -> chunk segment
+BlockType Chunk::GetBlock(int x, int y, int z) {
+    if (OutOfBounds(x,y,z)) {
+        return BlockType::air;
     }
+
+    int blockY = y % CHUNK_SIZE;
+    return mChunkSegments[y / CHUNK_SIZE].GetBlock(x, blockY, z);
+}
+
+void Chunk::RenderChunks() {
+    for (ChunkSegment &chunkSeg : mChunkSegments) {
+        chunkSeg.RenderChunk(); // makes and inits buffers
+    }
+}
+
+bool Chunk::OutOfBounds(int x, int y, int z) const noexcept
+{
+    if (x >= CHUNK_SIZE)
+        return true;
+    if (z >= CHUNK_SIZE)
+        return true;
+
+    if (x < 0)
+        return true;
+    if (y < 0)
+        return true;
+    if (z < 0)
+        return true;
+
+    if (y >= (int)mChunkSegments.size() * CHUNK_SIZE) {
+        return true;
+    }
+
+    return false;
 }
