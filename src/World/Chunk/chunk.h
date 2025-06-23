@@ -16,7 +16,7 @@ public:
     Chunk(ChunkManager &chunkManager, glm::ivec2 location);
 
     void CreateSections();
-
+    void MakeMeshes();
     void SetBlock(int x, int y, int z, BlockType type);
     BlockType GetBlock(int x, int y, int z);
     int GetIndex(const glm::vec3 &position);

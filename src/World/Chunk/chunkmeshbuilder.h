@@ -17,7 +17,7 @@ public:
 
     void BuildMesh();
 
-    bool ShouldAddFace(const std::array<GLfloat, 18> &face, const glm::ivec3 &position);
+    bool ShouldAddFace(const glm::ivec3 &adjBlock);
 private:
     ChunkSegment *mChunk = nullptr;
     ChunkMesh *mMesh = nullptr;

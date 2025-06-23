@@ -7,7 +7,6 @@ Chunk::Chunk(ChunkManager &chunkManager, glm::ivec2 location) :
     mLocation(location)
 {
     CreateSections();
-    std::cout << "Created Sections" << std::endl;
     for (int y = 0; y < CHUNK_SIZE * mChunkSegments.size(); ++y) { // y axis
         for (int x = 0; x < CHUNK_SIZE; ++x){ // x axis
             for (int z = 0; z < CHUNK_SIZE; ++z) { // z axis
@@ -19,11 +18,6 @@ Chunk::Chunk(ChunkManager &chunkManager, glm::ivec2 location) :
             }
         }
     }
-
-    std::cout << "Created Sections at chunk position: " << mLocation.x << ", " << mLocation.y << std::endl;
-    for (ChunkSegment &chunkSeg : mChunkSegments) {
-        chunkSeg.MakeMesh(); // makes and inits buffers
-    }
 }
 
 void Chunk::CreateSections() {
@@ -31,6 +25,12 @@ void Chunk::CreateSections() {
         mChunkSegments.emplace_back(*mChunkManager, glm::ivec3(mLocation.x, i, mLocation.y));
     }
 }
+
+void Chunk::MakeMeshes() {
+    for (ChunkSegment &chunkSeg : mChunkSegments) {
+        chunkSeg.MakeMesh(); // makes and inits buffers
+    }
+};
 
 void Chunk::SetBlock(int x, int y, int z, BlockType type) {
     if (y < 0)

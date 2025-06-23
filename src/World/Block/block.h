@@ -41,8 +41,8 @@ public:
         return mType;
     }
 
-    std::string GetTypeString() {
-        switch(mType){
+    std::string GetTypeString(BlockType type) {
+        switch(type){
             case (BlockType::air):
                 return std::string("air");
                 break;

@@ -22,6 +22,7 @@ public:
 
     void SetBlock(int x, int y, int z, Block &block);
     BlockType GetBlock(int x, int y, int z);
+
     int GetIndex(int x, int y, int z) {
         return y * CHUNK_AREA + z * CHUNK_SIZE + x;
     }

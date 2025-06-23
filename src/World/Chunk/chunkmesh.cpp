@@ -33,7 +33,7 @@ void ChunkMesh::InitBuffers()
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
         glEnableVertexAttribArray(0);
 
-        std::cout << "Size of buffer: " <<  mChunkVertices.size() << std::endl;
+        //std::cout << "Size of buffer: " <<  mChunkVertices.size() << std::endl;
     }
 }
 

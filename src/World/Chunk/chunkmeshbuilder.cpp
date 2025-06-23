@@ -42,31 +42,31 @@ void ChunkMeshBuilder::BuildMesh() {
 
         adjacent.update(x, y, z);
 
-       //if ((mChunk->GetLocation().y != 0) || y != 0) {
-        if (ShouldAddFace(BOTTOM_FACE, adjacent.down)) {
+       // if ((mChunk->GetLocation().y != 0) || y != 0) {
+       // }
+        if (ShouldAddFace(adjacent.down)) {
             mMesh->AddFace(BOTTOM_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
         }
-        //}
-        if (ShouldAddFace(TOP_FACE, adjacent.up)) {
+        if (ShouldAddFace(adjacent.up)) {
             mMesh->AddFace(TOP_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
         }
-        if (ShouldAddFace(LEFT_FACE, adjacent.left)) {
+        if (ShouldAddFace(adjacent.left)) {
             mMesh->AddFace(LEFT_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
         }
-        if (ShouldAddFace(RIGHT_FACE, adjacent.right)) {
+        if (ShouldAddFace(adjacent.right)) {
             mMesh->AddFace(RIGHT_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
         }
-        if (ShouldAddFace(FRONT_FACE, adjacent.front)) {
+        if (ShouldAddFace(adjacent.front)) {
             mMesh->AddFace(FRONT_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
         }
-        if (ShouldAddFace(BACK_FACE, adjacent.back)) {
+        if (ShouldAddFace(adjacent.back)) {
             mMesh->AddFace(BACK_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
         }
     }
 }
 
-bool ChunkMeshBuilder::ShouldAddFace(const std::array<GLfloat, 18> &face, const glm::ivec3 &position) {
-    auto blockType = mChunk->GetBlock(position.x, position.y, position.z);
+bool ChunkMeshBuilder::ShouldAddFace(const glm::ivec3 &adjBlock) {
+    auto blockType = mChunk->GetBlock(adjBlock.x, adjBlock.y, adjBlock.z);
 
     // check whether block at index
     if (blockType == BlockType::air) {
