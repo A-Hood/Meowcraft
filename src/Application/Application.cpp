@@ -170,12 +170,12 @@ int Application::Run()
             chunkManager.RenderChunks();
 
             // Skybox rendering
-            /*
+
             glDepthFunc(GL_LEQUAL);
             skybox->RenderSkybox(view, projection, *m_camera);
             glDepthFunc(GL_LESS);
             glBindVertexArray(0);
-            */
+
             SwapBuffers(m_window, p_open);
             glfwPollEvents();
 	}
