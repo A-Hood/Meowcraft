@@ -45,22 +45,22 @@ void ChunkMeshBuilder::BuildMesh() {
        // if ((mChunk->GetLocation().y != 0) || y != 0) {
        // }
         if (ShouldAddFace(adjacent.down)) {
-            mMesh->AddFace(BOTTOM_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
+            mMesh->AddFace(BOTTOM_FACE, FRONT_TEX_COORDS, glm::vec3(x, y, z), mChunk->GetLocation());
         }
         if (ShouldAddFace(adjacent.up)) {
-            mMesh->AddFace(TOP_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
+            mMesh->AddFace(TOP_FACE, FRONT_TEX_COORDS, glm::vec3(x, y, z), mChunk->GetLocation());
         }
         if (ShouldAddFace(adjacent.left)) {
-            mMesh->AddFace(LEFT_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
+            mMesh->AddFace(LEFT_FACE, SIDE_TEX_COORDS, glm::vec3(x, y, z), mChunk->GetLocation());
         }
         if (ShouldAddFace(adjacent.right)) {
-            mMesh->AddFace(RIGHT_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
+            mMesh->AddFace(RIGHT_FACE, SIDE_TEX_COORDS, glm::vec3(x, y, z), mChunk->GetLocation());
         }
         if (ShouldAddFace(adjacent.front)) {
-            mMesh->AddFace(FRONT_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
+            mMesh->AddFace(FRONT_FACE, TOP_TEX_COORDS, glm::vec3(x, y, z), mChunk->GetLocation());
         }
         if (ShouldAddFace(adjacent.back)) {
-            mMesh->AddFace(BACK_FACE, glm::vec3(x, y, z), mChunk->GetLocation());
+            mMesh->AddFace(BACK_FACE, TOP_TEX_COORDS, glm::vec3(x, y, z), mChunk->GetLocation());
         }
     }
 }
