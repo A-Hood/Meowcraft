@@ -10,9 +10,11 @@
 
 #include "chunkconstants.h"
 
+#include "../../Texture/texture.h"
+
 class ChunkMesh {
 public:
-    ChunkMesh() = default;
+    ChunkMesh();
 
     void InitBuffers(); // add to builder
 
@@ -26,6 +28,8 @@ private:
     std::vector<GLfloat> mChunkVertices;
     std::vector<GLfloat> mChunkTexCoords;
     int mAmountOfVertices;
+
+    Texture mTexture;
 
     unsigned int mVAO, mVBO;
 };

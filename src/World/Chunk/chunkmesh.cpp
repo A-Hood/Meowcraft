@@ -2,6 +2,9 @@
 
 #include "../Block/blockconstants.h"
 
+ChunkMesh::ChunkMesh() {
+    mTexture = Texture("hi");
+}
 
 void ChunkMesh::AddFace(const std::array<GLfloat, 18> &face,
                         const std::array<GLfloat, 12> &texCoords,
@@ -21,8 +24,8 @@ void ChunkMesh::AddFace(const std::array<GLfloat, 18> &face,
         mChunkVertices.push_back(vertex.y);
         mChunkVertices.push_back(vertex.z);
         // insert 2 tex coords
-        mChunkTexCoords.push_back(texCoords[itr++]);
-        mChunkTexCoords.push_back(texCoords[itr++]);
+        mChunkVertices.push_back(texCoords[itr++]);
+        mChunkVertices.push_back(texCoords[itr++]);
     }
 }
 
@@ -45,14 +48,18 @@ void ChunkMesh::InitBuffers()
         glEnableVertexAttribArray(1);
 
 
-        //std::cout << "Size of buffer: " <<  mChunkVertices.size() << std::endl;
+        std::cout << "Size of vertex buffer: " <<  (mChunkVertices.size() / 5) * 3 << "\n";
+        std::cout << "Size of tex coord buffer: " <<  (mChunkVertices.size() / 5) * 2 << "\n";
     }
 }
 
 void ChunkMesh::Render()
 {
     if (mAmountOfVertices != 0) {
+        glDisable(GL_BLEND);
+
         glBindVertexArray(mVAO);
+        mTexture.BindTexture();
         glDrawArrays(GL_TRIANGLES, 0, mChunkVertices.size());
         glBindVertexArray(0);
     }
