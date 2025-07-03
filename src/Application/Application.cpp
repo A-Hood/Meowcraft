@@ -47,6 +47,7 @@ int Application::InitWindow()
 		return -1;
 	}
 	glEnable(GL_DEPTH_TEST);
+    //glfwSwapInterval(1); // vsync
    	return 0;
 }
 
@@ -160,7 +161,7 @@ int Application::Run()
             shader.use();
             glm::mat4 model = glm::mat4(1.0f);
             glm::mat4 view = m_camera->GetViewMatrix();
-            glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetFOV()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+            glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetFOV()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 1000.0f);
             shader.setMat4("model", model);
             shader.setMat4("view", view);
             shader.setMat4("projection", projection);
@@ -170,7 +171,6 @@ int Application::Run()
             chunkManager.RenderChunks();
 
             // Skybox rendering
-
             glDepthFunc(GL_LEQUAL);
             skybox->RenderSkybox(view, projection, *m_camera);
             glDepthFunc(GL_LESS);

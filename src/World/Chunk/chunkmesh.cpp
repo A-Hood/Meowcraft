@@ -46,10 +46,8 @@ void ChunkMesh::InitBuffers()
         // Tex Coords
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
         glEnableVertexAttribArray(1);
-
-
-        std::cout << "Size of vertex buffer: " <<  (mChunkVertices.size() / 5) * 3 << "\n";
-        std::cout << "Size of tex coord buffer: " <<  (mChunkVertices.size() / 5) * 2 << "\n";
+        //std::cout << "Size of vertex buffer: " <<  (mChunkVertices.size() / 5) * 3 << "\n";
+        //std::cout << "Size of tex coord buffer: " <<  (mChunkVertices.size() / 5) * 2 << "\n";
     }
 }
 
