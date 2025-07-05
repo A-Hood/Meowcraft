@@ -11,7 +11,7 @@ First attempt at creating a voxel-based procedurally generated world utilising O
 - FastNoiseLite
   
 ## Requirements
-Compiler version: C++17
+Compiler version: C++20
 
 ## Build:
 Windows (Only Tested)
